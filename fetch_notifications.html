@@ -1,0 +1,36 @@
+<!-- JavaScript Polling to Display Notifications -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Live Notifications</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1>Notifications</h1>
+    <div id="notification-count">You have 0 new notifications</div>
+    <div id="notifications"></div>
+
+    <script>
+        function fetchNotifications() {
+            $.ajax({
+                url: 'fetch_notifications.php',
+                method: 'GET',
+                success: function(data) {
+                    const notifications = JSON.parse(data);
+                    $('#notification-count').text(`You have ${notifications.length} new notifications`);
+
+                    let notificationHtml = '';
+                    notifications.forEach(notification => {
+                        notificationHtml += `<p>${notification.message}</p>`;
+                    });
+                    $('#notifications').html(notificationHtml);
+                }
+            });
+        }
+
+        // Poll every 5 seconds
+        setInterval(fetchNotifications, 5000);
+    </script>
+</body>
+</html>
